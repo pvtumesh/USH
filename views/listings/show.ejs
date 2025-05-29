@@ -1,0 +1,204 @@
+<% layout("/layouts/boilerplate.ejs") %>
+<body>
+  <h3></h3>
+  <div class="container show">
+    <div class="card show">
+      <h5 class="card-title show"><%= listing.title %></h5>
+      <img
+        class="card-img-top show"
+        src="<%= listing.image.url %>"
+        alt="<%= listing.title %> image"
+      />
+      <div class="card-body show">
+        <p class="card-text show-title">
+          Owner by:
+          <b
+            ><i class="fst-italic text-success-emphasis"
+              ><%= listing.owner.username %></i
+            ></b
+          >
+        </p>
+        <p class="card-text show-des"><%= listing.description %></p>
+        <!-- for price  -->
+        <p class="card-text show-price">
+          <%= listing.price.toLocaleString("en-IN", { style: "currency",
+          currency: "INR"}) %>
+        </p>
+        <!-- location and country together -->
+        <p class="card-text show-loc">
+          <%= listing.location %>, <%= listing.country %>
+        </p>
+
+        <% if(currentUser && currentUser._id.toString() ===
+        listing.owner._id.toString()) { %>
+        <div class="ed-del">
+          <div>
+            <a
+              href="/listings/<%= listing._id %>/edit"
+              class="btn btn-primary show-edit"
+              ><i class="fa-solid fa-pen-to-square"></i> Edit</a
+            >
+          </div>
+          <div>
+            <form
+              action="/listings/<%= listing._id %>?_method=DELETE"
+              method="post"
+            >
+              <button class="btn btn-danger show-del">
+                Delete &nbsp <i class="fa-solid fa-trash"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+        <% } %>
+        <hr />
+        <div>
+          <% if (currentUser) { %>
+          <h4>Leave a Review</h4>
+          <form
+            action="/listings/<%= listing._id %>/reviews"
+            method="post"
+            novalidate
+            class="needs-validation"
+          >
+          
+            <div>
+              <label class="form-label" for="rating">Rating</label>
+            <fieldset class="starability-checkmark">
+              <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="1" checked aria-label="No rating." />
+              <input type="radio" id="first-rate1" name="rating" value="1" />
+              <label for="first-rate1" title="Terrible">1 star</label>
+              <input type="radio" id="first-rate2" name="rating" value="2" />
+              <label for="first-rate2" title="Not good">2 stars</label>
+              <input type="radio" id="first-rate3" name="rating" value="3" />
+              <label for="first-rate3" title="Average">3 stars</label>
+              <input type="radio" id="first-rate4" name="rating" value="4" />
+              <label for="first-rate4" title="Very good">4 stars</label>
+              <input type="radio" id="first-rate5" name="rating" value="5" />
+              <label for="first-rate5" title="Amazing">5 stars</label>
+            </fieldset>
+            </div>
+            <div>
+              <label class="form-label" for="comment">Comments</label>
+              <textarea
+                class="form-control"
+                name="comment"
+                id="comment"
+                cols="30"
+                rows="5"
+                required
+                placeholder="Write your review here..."
+              ></textarea>
+              <div class="invalid-feedback">Please enter a comment...</div>
+            </div>
+            <br />
+            <div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+          <hr />
+          <% } %>
+
+
+          <h4>All Reviews</h4>
+          <% if (listing.reviews.length === 0) { %>
+          <p>No reviews yet</p>
+          <% if (currentUser) { %>
+          <p>Be the first to leave a review</p>
+          <% } else { %> 
+          <p><a href="/login">Login</a> to leave a review</p>
+          <% } %>
+          <% } %>
+
+          <div class="row">
+            <% for (let review of listing.reviews) { %>
+            <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
+              <div class="card h-100">
+                <div class="card-body">
+                  <div class="d-flex align-items-center gap-2">
+                    <img
+                      class="rounded-circle"
+                      src="https://static.vecteezy.com/system/resources/thumbnails/000/439/863/small_2x/Basic_Ui__28186_29.jpg"
+                      alt="Profile image"
+                      width="30"
+                      height="30"
+                    />
+                    <b>
+                      <i class="fst-italic text-success-emphasis">
+                        <%= review.author.username %></i>
+                        </b>
+                  </div>
+                
+                   
+                  <% const roundedRating = Math.floor(review.rating); %>
+                  <div class="d-flex align-items-center gap-2 mt-2">
+                    <b>Rating: </b>
+                    <div class="px-2 py-1 bg-warning text-dark fw-bold rounded-start">
+                      <%= review.rating.toFixed(1) %>
+                    </div>
+                    <div class="bg-dark px-2 py-1 rounded-end d-flex align-items-center gap-1">
+                      <% for(let i = 1; i <= 5; i++) { %>
+                        <% if(i <= roundedRating) { %>
+                          <i class="fa-solid fa-star text-warning"></i>
+                        <% } else { %>
+                          <i class="fa-solid fa-star text-secondary"></i>
+                        <% } %>
+                      <% } %>
+                    </div>
+                  </div>
+
+
+
+                  <p class="card-text"><%= review.comment %></p>
+                  <p
+                    class="card-text m-0 p-0"
+                    style="white-space: nowrap !important"
+                  >
+                    <small class="text-muted">
+                      <form
+                        action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
+                        method="post"
+                      >
+                      <% if (currentUser && currentUser._id.toString() ===
+                      review.author._id.toString()) { %> 
+                        <button type="submit" class="btn btn-dark btn-sm">
+                          Delete
+                        </button>
+                      <% } %>
+                      </form>
+                    </small>
+                    <!-- created at -->
+                    <small class="text-muted d-block">
+                        <i class="fa-solid fa-calendar-days me-1"></i>
+                        <%= review.createdAt.toDateString() %> 
+                        at 
+                      <%= review.createdAt.toLocaleTimeString() %>
+                    </small>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <ul>
+        <li> <%= listing.title %></li>
+        <li> <%= listing.description %></li>
+
+        <li> <%= listing.price.toLocaleString("en-IN", { style: "currency", currency: "INR"}) %></li>
+        <li> <%= listing.location %></li>
+        <li> <%= listing.country %></li>
+    </ul>
+
+    <br>
+    <a href="/listings/<%= listing._id %>/edit">Edit Listing</a>
+
+    <br><br>
+    <form action="/listings/<%= listing._id %>?_method=DELETE" method="post">
+        <button> Delete this listing </button>
+    </form> -->
+</body>

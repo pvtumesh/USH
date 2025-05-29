@@ -1,0 +1,40 @@
+<nav class="navbar navbar-expand-md navbar-light bg-body-light border-bottom sticky-top" style="margin-left: 1.5rem; margin-right: 1.5rem">
+  <a class="navbar-brand" href="/"><i class="fa-solid fa-dungeon"></i></a>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarNavAltMarkup"
+  > 
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link" href="/listings"
+        >Home <span class="sr-only"></span></a
+      >
+      <a class="nav-item nav-link" href="/listings">All Listings</a>
+    </div>
+    <div class="navbar-nav ms-auto">
+       <form class="form-inline">
+    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" style="color: #fe424d;">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" style="color: #fe424d;" onmouseover="this.style.color='white'" onmouseout="this.style.color='#fe424d'">Search</button>
+  </form>
+    </div>
+
+    
+
+    <div class="navbar-nav ms-auto">
+      <a class="nav-item nav-link text-success font-italic font-weight-bold " href="/listings/new">become a host</a>
+
+      <% if (!currentUser) { %>
+      <a class="nav-item nav-link" href="/signup"> <b>SignUp</b> <span class="sr-only"></span></a>
+      <a class="nav-item nav-link" href="/login"><b>Login</b></a>
+      <% } else { %>
+      <img class="rounded-circle" src="https://static.vecteezy.com/system/resources/thumbnails/000/439/863/small_2x/Basic_Ui__28186_29.jpg" alt="Profile image" width="30" height="30" />
+      <a class="nav-item nav-link" href="/users/<%= currentUser._id %>"><b class="text-uppercase font-italic text-success"><%= currentUser.username %></b></a>
+      <a class="nav-item nav-link text-danger" href="/logout">Logout</a>
+      <% } %>
+    </div>
+  </div>
+</nav>

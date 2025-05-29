@@ -1,0 +1,22 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+<!-- <div class="alert alert-danger" role="alert">
+  
+  </div>
+
+  <div class="alert alert-danger" role="alert">
+    <h4 class="alert-heading">Oh snap! You got an error!</h4>
+    <p>Change this and that and try again.</p>
+    <hr>
+    <p class="mb-0">Error Code: <strong><%= statusCode %></strong></p>
+  </div> -->
+
+  <div id="customErrorAlert" class="alert alert-danger alert-dismissible fade show slide-down" role="alert">
+    <h4 class="alert-heading">🚨 Error <%= statusCode %></h4>
+    <p><strong>Message:</strong> <%= message %></p>
+    <% if (err.stack) { %>
+      <hr>
+      <pre style="white-space: pre-wrap;"><%= err.stack %></pre>
+    <% } %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
