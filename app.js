@@ -61,8 +61,7 @@ app.use(e.static(path.join(__dirname, "public")));
 // connecting to Database
 // const MONGO_URL = "mongodb://127.0.0.1:27017/USH";
 
-let dbUrl = process.env.ATLASDB_URL || "mongodb://127.0.0.1:27017/USH";
-const MONGO_URL = dbUrl.replace("password", process.env.DB_PASSWORD);
+let dbUrl = process.env.ATLASDB_URL;
 
 main().then(() => {
     // console.log("connected to DB");   
